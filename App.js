@@ -8,6 +8,25 @@ export default function App() {
   const [filepaths, setFilepaths] = useState([]); // [uri1, uri2, uri3, ...
   const [sound, setSound] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
+  async function playSound(uri) {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync({ uri });
+    setSound(sound);
+
+    console.log("Playing Sound");
+    await sound.playAsync();
+  }
+
   async function startRecording() {
     try {
       if (permissionResponse.status !== "granted") {
@@ -51,6 +70,14 @@ export default function App() {
         onPress={recording ? stopRecording : startRecording}
       />
       <View style={{ height: 20 }} />
+      <Text>Recordings:</Text>
+      {/* list of recording with some padding between them */}
+      {filepaths.map((uri, i) => (
+        <View key={i}>
+          <Button title={uri} onPress={() => playSound(uri)} />
+          <View style={{ height: 10 }} />
+        </View>
+      ))}
       <StatusBar style="auto" />
     </View>
   );
