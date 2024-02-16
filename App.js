@@ -14,12 +14,12 @@ import {
 } from "react-native";
 
 const Stack = createNativeStackNavigator();
+
+function DetailsScreen({ route, navigation }) {
+  const { file } = route.params;
   const [sound, setSound] = useState();
-  const [permissionResponse, requestPermission] = Audio.usePermissions();
-  const [pulseAnimation] = useState(new Animated.Value(1));
 
   useEffect(() => {
-    getAudioFiles();
     return sound
       ? () => {
           console.log("Unloading Sound");
@@ -27,6 +27,37 @@ const Stack = createNativeStackNavigator();
         }
       : undefined;
   }, [sound]);
+
+  async function playSound(uri) {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync({ uri });
+    setSound(sound);
+
+    console.log("Playing Sound");
+    await sound.playAsync();
+  }
+
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text>{file.filename}</Text>
+      <Text>Duration: {file.duration / 1000} seconds</Text>
+      <View style={{ height: 20 }} />
+      <Button title="Play" onPress={() => playSound(file.uri)} />
+      <View style={{ height: 20 }} />
+      <Button title="Go to Home" onPress={() => navigation.navigate("Home")} />
+    </View>
+  );
+}
+
+function HomeScreen({ navigation }) {
+  const [recording, setRecording] = useState();
+  const [audioObjects, setAudioObjects] = useState([]); // [ {uri: "", filename: "", duration: 0} ]
+  const [permissionResponse, requestPermission] = Audio.usePermissions();
+  const [pulseAnimation] = useState(new Animated.Value(1));
+
+  useEffect(() => {
+    getAudioFiles();
+  }, [audioObjects]);
 
   useEffect(() => {
     if (recording) {
@@ -181,8 +212,11 @@ const Stack = createNativeStackNavigator();
               alignItems: "center",
             }}
           >
-            <Text>{file.filename}</Text>
-            <Button title="Play" onPress={() => playSound(file.uri)} />
+            <Button
+              title={file.filename}
+              onPress={() => navigation.navigate("Details", { file })}
+            />
+            <View style={{ width: 10 }} />
             <Button
               title="Delete"
               onPress={() => deleteAudioFile(file.filename)}
@@ -195,8 +229,17 @@ const Stack = createNativeStackNavigator();
     </View>
   );
 }
+
+export default function App() {
+  return (
     <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
