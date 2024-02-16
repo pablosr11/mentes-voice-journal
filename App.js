@@ -1,4 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Audio } from "expo-av";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
@@ -11,9 +13,7 @@ import {
   View,
 } from "react-native";
 
-export default function App() {
-  const [recording, setRecording] = useState();
-  const [audioObjects, setAudioObjects] = useState([]); // [ {uri: "", filename: "", duration: 0} ]
+const Stack = createNativeStackNavigator();
   const [sound, setSound] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [pulseAnimation] = useState(new Animated.Value(1));
@@ -195,6 +195,8 @@ export default function App() {
     </View>
   );
 }
+    <NavigationContainer>
+    </NavigationContainer>
 
 const styles = StyleSheet.create({
   container: {
