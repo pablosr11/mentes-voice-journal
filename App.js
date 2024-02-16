@@ -11,6 +11,7 @@ export default function App() {
   const [permissionResponse, requestPermission] = Audio.usePermissions();
 
   useEffect(() => {
+    getAudioFiles();
     return sound
       ? () => {
           console.log("Unloading Sound");
@@ -97,8 +98,19 @@ export default function App() {
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
     });
+
+    const { durationMillis } = await recording.getStatusAsync();
     const uri = recording.getURI();
-    setFilepaths((prev) => [...prev, uri]);
+    const audioName = await generateFilename();
+
+    const audioObject = {
+      uri,
+      filename: audioName,
+      duration: durationMillis,
+    };
+
+    await storeAudioLocally(audioObject);
+
     console.log("Recording stopped and stored at", uri);
   }
 
