@@ -182,10 +182,7 @@ export default function App() {
             }}
           >
             <Text>{file.filename}</Text>
-            <Button
-              title="Play"
-              onPress={() => playSound(file.uri)}
-            />
+            <Button title="Play" onPress={() => playSound(file.uri)} />
             <Button
               title="Delete"
               onPress={() => deleteAudioFile(file.filename)}
