@@ -138,12 +138,10 @@ export default function App() {
             <Button
               title="Play"
               onPress={() => playSound(file.uri)}
-              disabled={recording}
             />
             <Button
               title="Delete"
               onPress={() => deleteAudioFile(file.filename)}
-              disabled={recording}
             />
           </View>
           <View style={{ height: 20 }} />
