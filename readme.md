@@ -15,7 +15,9 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 
 ## todo
 - integrate firebase OR at least trigger pipeline of transcribe etc. 
+- do everything on device - no third party doing transcription/processing.
 
 
 ## decisions
 - asyncstorage vs https://rnfirebase.io -> keep things simpler and think about online integration later.
+- local device ID -> once auth is introduced we can group local ids against email/id (in case of multiple devices etc. )
