@@ -27,6 +27,17 @@ export default function App() {
     await sound.playAsync();
   }
 
+  async function generateFilename() {
+    const date = new Date();
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
+    return `Note_${day}${month}${year}_${hours}${minutes}${seconds}.m4a`;
+  }
+
   async function startRecording() {
     try {
       if (permissionResponse.status !== "granted") {
