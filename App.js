@@ -123,12 +123,30 @@ export default function App() {
         onPress={recording ? stopRecording : startRecording}
       />
       <View style={{ height: 20 }} />
-      <Text>Recordings:</Text>
-      {/* list of recording with some padding between them */}
-      {filepaths.map((uri, i) => (
-        <View key={i}>
-          <Button title={uri} onPress={() => playSound(uri)} />
-          <View style={{ height: 10 }} />
+      <Text>Notes:</Text>
+      <View style={{ height: 20 }} />
+      {audioObjects.map((file) => (
+        <View key={file.filename}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text>{file.filename}</Text>
+            <Button
+              title="Play"
+              onPress={() => playSound(file.uri)}
+              disabled={recording}
+            />
+            <Button
+              title="Delete"
+              onPress={() => deleteAudioFile(file.filename)}
+              disabled={recording}
+            />
+          </View>
+          <View style={{ height: 20 }} />
         </View>
       ))}
       <StatusBar style="auto" />
