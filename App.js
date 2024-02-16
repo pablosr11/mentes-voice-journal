@@ -155,10 +155,20 @@ export default function App() {
     <View style={styles.container}>
       <Text>Tap to start recording!</Text>
       <View style={{ height: 20 }} />
-      <Button
-        title={recording ? "Stop Recording" : "Start Recording"}
-        onPress={recording ? stopRecording : startRecording}
-      />
+      <Animated.View style={{ transform: [{ scale: pulseAnimation }] }}>
+        <TouchableOpacity
+          style={
+            recording
+              ? [styles.recordButton, { backgroundColor: "red" }]
+              : styles.recordButton
+          }
+          onPress={recording ? stopRecording : startRecording}
+        >
+          <Text style={styles.buttonText}>
+            {recording ? "Stop Recording" : "Start Recording"}
+          </Text>
+        </TouchableOpacity>
+      </Animated.View>
       <View style={{ height: 20 }} />
       <Text>Notes:</Text>
       <View style={{ height: 20 }} />
@@ -195,5 +205,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  recordButton: {
+    backgroundColor: "green",
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
