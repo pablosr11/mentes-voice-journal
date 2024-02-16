@@ -117,15 +117,6 @@ function HomeScreen({ navigation }) {
     }
   }
 
-  async function playSound(uri) {
-    console.log("Loading Sound");
-    const { sound } = await Audio.Sound.createAsync({ uri });
-    setSound(sound);
-
-    console.log("Playing Sound");
-    await sound.playAsync();
-  }
-
   async function generateFilename() {
     const date = new Date();
     const day = date.getDate().toString().padStart(2, "0");
@@ -181,7 +172,6 @@ function HomeScreen({ navigation }) {
 
     console.log("Recording stopped and stored at", uri);
   }
-
   return (
     <View style={styles.container}>
       <Text>Tap to start recording!</Text>
