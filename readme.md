@@ -6,6 +6,7 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 `npx expo install --check`
 `npx expo-doctor`
 
+## issues
 
 ## next step
 - on stop recording, send to backend.

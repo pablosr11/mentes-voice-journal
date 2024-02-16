@@ -60,7 +60,7 @@ function HomeScreen({ navigation }) {
 
   useEffect(() => {
     getAudioFiles();
-  }, [audioObjects]);
+  }, []);
 
   useEffect(() => {
     if (recording) {
