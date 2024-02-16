@@ -27,6 +27,15 @@ export default function App() {
         }
       : undefined;
   }, [sound]);
+
+  useEffect(() => {
+    if (recording) {
+      startPulseAnimation();
+    } else {
+      stopPulseAnimation();
+    }
+  }, [recording]);
+
   function startPulseAnimation() {
     Animated.loop(
       Animated.sequence([
