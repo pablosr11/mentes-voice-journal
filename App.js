@@ -1,14 +1,22 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Audio } from "expo-av";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  Animated,
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function App() {
   const [recording, setRecording] = useState();
   const [audioObjects, setAudioObjects] = useState([]); // [ {uri: "", filename: "", duration: 0} ]
   const [sound, setSound] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
+  const [pulseAnimation] = useState(new Animated.Value(1));
 
   useEffect(() => {
     getAudioFiles();
@@ -19,6 +27,26 @@ export default function App() {
         }
       : undefined;
   }, [sound]);
+  function startPulseAnimation() {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnimation, {
+          toValue: 0.8,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnimation, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }
+
+  function stopPulseAnimation() {
+    pulseAnimation.setValue(1);
+  }
 
   async function deleteAudioFile(filename) {
     try {
