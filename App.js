@@ -12,7 +12,18 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { getApps, initializeApp } from "firebase/app";
+import firebaseConfig from "./firebaseConfig"; // TODO: should this be commited?
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+import * as SecureStore from "expo-secure-store";
+import * as Crypto from "expo-crypto";
 
+// Editing this file with fast refresh will reinitialize the app on every refresh, let's not do that
+if (!getApps().length) {
+  initializeApp(firebaseConfig);
+}
+
+const storage = getStorage();
 const Stack = createNativeStackNavigator();
 
 function DetailsScreen({ route, navigation }) {
