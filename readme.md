@@ -1,6 +1,7 @@
 Small app to record and transcript your thoughts. or ideas. or emotions.
 
 ## Development
+
 `npx expo install`
 `npx expo start`
 `npx expo install --check`
@@ -9,16 +10,18 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 ## issues
 
 ## next step
+
 - on stop recording, send to backend.
-    - where, how? 
-    - with a user id (do we generate on auth, can we avoid auth to start?) -> generate uuid, store securely on device and use as userid.
-    - can we make app fully workable offline? keep track of sized of stuff locally? only connnectionr equired when generating transcript or updating. 
+  - add to firestore with user id and link to storage. - https://firebase.google.com/docs/firestore/quickstart?authuser=0#web-modular-api
 
 ## todo
 - integrate firebase OR at least trigger pipeline of transcribe etc. 
 - do everything on device - no third party doing transcription/processing.
-
+- clean storage periodically (based on db entries.)
 
 ## decisions
+
 - asyncstorage vs https://rnfirebase.io -> keep things simpler and think about online integration later.
 - local device ID -> once auth is introduced we can group local ids against email/id (in case of multiple devices etc. )
+
+## questions/doubts/to-think
