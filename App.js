@@ -37,6 +37,16 @@ function DetailsScreen({ route, navigation }) {
     await sound.playAsync();
   }
 
+  async function deleteAudioFile(filename) {
+    try {
+      await AsyncStorage.removeItem(filename);
+      // go back to home screen
+      navigation.navigate("Home");
+    } catch (e) {
+      console.error("Failed to delete audio file", e);
+    }
+  }
+
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>{file.filename}</Text>
@@ -46,7 +56,9 @@ function DetailsScreen({ route, navigation }) {
       <Text>Tags: #tag1 #tag2 #tag3 </Text>
       <View style={{ height: 20 }} />
       <Button title="Play" onPress={() => playSound(file.uri)} />
-      <View style={{ height: 20 }} />
+      <View style={{ height: 10 }} />
+      <Button title="Delete" onPress={() => deleteAudioFile(file.filename)} />
+      <View style={{ height: 30 }} />
       <Button title="Go to Home" onPress={() => navigation.navigate("Home")} />
     </View>
   );
@@ -210,10 +222,6 @@ function HomeScreen({ navigation }) {
               onPress={() => navigation.navigate("Details", { file })}
             />
             <View style={{ width: 10 }} />
-            <Button
-              title="Delete"
-              onPress={() => deleteAudioFile(file.filename)}
-            />
           </View>
           <View style={{ height: 20 }} />
         </View>
