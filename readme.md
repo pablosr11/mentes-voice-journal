@@ -15,8 +15,11 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
   - add to firestore with user id and link to storage. - https://firebase.google.com/docs/firestore/quickstart?authuser=0#web-modular-api
 
 ## todo
-- integrate firebase OR at least trigger pipeline of transcribe etc. 
+
+- read: https://firebase.google.com/docs/projects/api-keys
+- integrate firebase OR at least trigger pipeline of transcribe etc.
 - do everything on device - no third party doing transcription/processing.
+- can we make app fully workable offline? keep track of sized of stuff locally? only connnectionr equired when generating transcript or updating.
 - clean storage periodically (based on db entries.)
 
 ## decisions
