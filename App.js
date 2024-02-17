@@ -207,9 +207,9 @@ function HomeScreen({ navigation }) {
     await storeAudioLocally(audioObject);
 
     const storageRef = ref(storage, fbStoragePath);
-    await uploadBytes(storageRef, await fetch(uri), {
-      contentType: "audio/m4a",
-    });
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    await uploadBytes(storageRef, blob);
 
     console.log("Recording stopped and stored at", uri);
   }
