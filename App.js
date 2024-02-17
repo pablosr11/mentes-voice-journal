@@ -51,7 +51,6 @@ function DetailsScreen({ route, navigation }) {
   async function deleteAudioFile(filename) {
     try {
       await AsyncStorage.removeItem(filename);
-      // go back to home screen
       navigation.navigate("Home");
     } catch (e) {
       console.error("Failed to delete audio file", e);
@@ -82,8 +81,11 @@ function HomeScreen({ navigation }) {
   const [pulseAnimation] = useState(new Animated.Value(1));
 
   useEffect(() => {
-    getAudioFiles();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", () => {
+      getAudioFiles();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     if (recording) {
