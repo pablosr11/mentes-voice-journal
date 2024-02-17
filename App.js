@@ -116,13 +116,18 @@ function HomeScreen({ navigation }) {
     pulseAnimation.setValue(1);
   }
 
-  async function deleteAudioFile(filename) {
-    try {
-      await AsyncStorage.removeItem(filename);
-      getAudioFiles();
-    } catch (e) {
-      console.error("Failed to delete audio file", e);
+  async function getLocalUserId() {
+    const fetchUUID = await SecureStore.getItemAsync("secure_deviceid");
+    if (fetchUUID) {
+      console.log("Fetched UUID from secure storage");
+      const cleanUUID = fetchUUID.replace(/['"]+/g, "");
+      uuid = cleanUUID;
+    } else {
+      uuid = Crypto.randomUUID();
+      await SecureStore.setItemAsync("secure_deviceid", JSON.stringify(uuid));
+      console.log("Generated new UUID and stored in secure storage");
     }
+    return uuid;
   }
 
   async function getAudioFiles() {
