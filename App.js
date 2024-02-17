@@ -193,15 +193,23 @@ function HomeScreen({ navigation }) {
 
     const { durationMillis } = await recording.getStatusAsync();
     const uri = recording.getURI();
-    const audioName = await generateFilename();
+    const userId = await getLocalUserId();
+    const filename = await generateFilename();
+    const fbStoragePath = `audios/${userId}/${filename}`;
 
     const audioObject = {
       uri,
-      filename: audioName,
+      filename,
+      fbStoragePath,
       duration: durationMillis,
     };
 
     await storeAudioLocally(audioObject);
+
+    const storageRef = ref(storage, fbStoragePath);
+    await uploadBytes(storageRef, await fetch(uri), {
+      contentType: "audio/m4a",
+    });
 
     console.log("Recording stopped and stored at", uri);
   }
