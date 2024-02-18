@@ -10,12 +10,12 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 ## issues
 
 ## next step
+
 - generate transcript and data - log status in db
 
 ## todo
 
-
-- refactor code
+- refactor code (dry, data models, minimal local storage so we dont have to sync.)
 - add auth
 - read: https://firebase.google.com/docs/projects/api-keys + same for storage + firestore
 - integrate firebase OR at least trigger pipeline of transcribe etc.
