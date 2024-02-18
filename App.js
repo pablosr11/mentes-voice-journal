@@ -19,13 +19,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { getApps, initializeApp } from "firebase/app";
 import firebaseConfig from "./firebaseConfig"; // TODO: should this be commited?
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import * as SecureStore from "expo-secure-store";
-import * as Crypto from "expo-crypto";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
-import * as Device from "expo-device";
 
 // Editing this file with fast refresh will reinitialize the app on every refresh, let's not do that
 if (!getApps().length) {
@@ -35,6 +29,9 @@ if (!getApps().length) {
 const storage = getStorage();
 const Stack = createNativeStackNavigator();
 const db = getFirestore(app);
+
+const functions = getFunctions(app, "europe-west2");
+const onRequestTranscription = httpsCallable(functions, "on_request_example");
 
 function DetailsScreen({ route, navigation }) {
   const { file } = route.params;
@@ -255,6 +252,13 @@ function HomeScreen({ navigation }) {
 
     const storageRef = ref(storage, fbStoragePath);
     await uploadBytes(storageRef, blob);
+
+    try {
+      const tmp = onRequestTranscription({ filename });
+      console.log("Requested transcription");
+    } catch (e) {
+      console.error("Error requesting transcription: ", e);
+    }
 
     console.log("Recording stopped and stored at", uri);
   }
