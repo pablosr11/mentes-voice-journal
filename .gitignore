@@ -37,3 +37,6 @@ yarn-error.*
 # pablo: others
 .api**
 firebaseConfig.js
+venv/
+**.log
+**.pyc

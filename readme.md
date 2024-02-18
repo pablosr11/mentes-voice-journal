@@ -7,6 +7,10 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 `npx expo install --check`
 `npx expo-doctor`
 
+`firebase login`
+`firebase init functions`
+`firebase emulators:start` - to start local firebase emulator for the fns
+
 ## issues
 
 ## next step
