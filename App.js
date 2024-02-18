@@ -17,6 +17,7 @@ import firebaseConfig from "./firebaseConfig"; // TODO: should this be commited?
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import * as SecureStore from "expo-secure-store";
 import * as Crypto from "expo-crypto";
+import * as Device from "expo-device";
 
 // Editing this file with fast refresh will reinitialize the app on every refresh, let's not do that
 if (!getApps().length) {
@@ -193,9 +194,17 @@ function HomeScreen({ navigation }) {
 
     const { durationMillis } = await recording.getStatusAsync();
     const uri = recording.getURI();
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    const size = blob.size;
     const userId = await getLocalUserId();
     const filename = await generateFilename();
     const fbStoragePath = `audios/${userId}/${filename}`;
+
+    const osName = Device.osName;
+    const osVersion = Device.osVersion;
+    const modelName = Device.modelName;
 
     const audioObject = {
       uri,
