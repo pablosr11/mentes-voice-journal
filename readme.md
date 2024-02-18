@@ -20,6 +20,8 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 - read: https://firebase.google.com/docs/projects/api-keys + same for storage + firestore
 - integrate firebase OR at least trigger pipeline of transcribe etc.
 - do everything on device - no third party doing transcription/processing.
+- set firebase bucket to private. only public during dev. FB storage > rules
+  - enable app check. https://firebase.google.com/docs/storage/web/start#next_steps
 - can we make app fully workable offline? keep track of sized of stuff locally? only connnectionr equired when generating transcript or updating.
 - clean storage periodically (based on db entries.)
 
@@ -29,3 +31,5 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 - local device ID -> once auth is introduced we can group local ids against email/id (in case of multiple devices etc. )
 
 ## questions/doubts/to-think
+
+- what to store locally? and online? -- whats the minimum locally? what would be latency to rerieve files etc?
