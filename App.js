@@ -2,7 +2,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Audio } from "expo-av";
+import * as Crypto from "expo-crypto";
+import * as Device from "expo-device";
+import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
+import { getApps, initializeApp } from "firebase/app";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { getFunctions, httpsCallable } from "firebase/functions";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import {
   Animated,
