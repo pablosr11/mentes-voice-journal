@@ -211,15 +211,23 @@ function HomeScreen({ navigation }) {
     const audioObject = {
       uri,
       filename,
-      fbStoragePath,
-      duration: durationMillis,
-    };
 
+    // do we want to store the audio locally? (for now, yes)
     await storeAudioLocally(audioObject);
 
+    try {
+      const docRef = await addDoc(collection(db, "voiceNotes"), audioObject);
+      console.log(
+        "Document written with ID: ",
+        docRef.id,
+        "and filename",
+        filename
+      );
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+
     const storageRef = ref(storage, fbStoragePath);
-    const response = await fetch(uri);
-    const blob = await response.blob();
     await uploadBytes(storageRef, blob);
 
     console.log("Recording stopped and stored at", uri);
