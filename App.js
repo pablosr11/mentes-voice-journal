@@ -17,15 +17,17 @@ import firebaseConfig from "./firebaseConfig"; // TODO: should this be commited?
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import * as SecureStore from "expo-secure-store";
 import * as Crypto from "expo-crypto";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 import * as Device from "expo-device";
 
 // Editing this file with fast refresh will reinitialize the app on every refresh, let's not do that
 if (!getApps().length) {
-  initializeApp(firebaseConfig);
+  var app = initializeApp(firebaseConfig);
 }
 
 const storage = getStorage();
 const Stack = createNativeStackNavigator();
+const db = getFirestore(app);
 
 function DetailsScreen({ route, navigation }) {
   const { file } = route.params;
