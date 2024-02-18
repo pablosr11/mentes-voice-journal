@@ -209,8 +209,26 @@ function HomeScreen({ navigation }) {
     const modelName = Device.modelName;
 
     const audioObject = {
-      uri,
       filename,
+      sizeBytes: size,
+      durationMs: durationMillis,
+      status: null,
+      data: {
+        title: null,
+        summary: null,
+        keywords: null,
+        transcript: null,
+      },
+      userId,
+      storagePath: fbStoragePath,
+      createdAt: new Date().toISOString(),
+      device: {
+        osName,
+        osVersion,
+        modelName,
+        onDeviceUri: uri,
+      },
+    };
 
     // do we want to store the audio locally? (for now, yes)
     await storeAudioLocally(audioObject);
