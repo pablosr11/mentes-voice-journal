@@ -63,7 +63,8 @@ function DetailsScreen({ route, navigation }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>{file.filename}</Text>
-      <Text>Duration: {file.duration / 1000} seconds</Text>
+      <Text>Duration: {file.durationMs / 1000} seconds</Text>
+      <Text>Size: {file.sizeBytes / 1000} KB</Text>
       <Text>Summary: ~~100 random chars </Text>
       <Text>Bullets points: xxx </Text>
       <Text>Tags: #tag1 #tag2 #tag3 </Text>
