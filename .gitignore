@@ -35,8 +35,8 @@ yarn-error.*
 *.tsbuildinfo
 
 # pablo: others
-.api**
 firebaseConfig.js
 venv/
+.env*
 **.log
 **.pyc
