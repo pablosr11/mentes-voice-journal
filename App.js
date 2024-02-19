@@ -257,6 +257,8 @@ function HomeScreen({ navigation }) {
         "and filename",
         filename
       );
+      audioObject.docId = docRef.id;
+      await storeAudioLocally(audioObject);
       const tmp = await onRequestTranscription({
         docId: docRef.id,
         fbStoragePath,
