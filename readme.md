@@ -28,7 +28,7 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 - set firebase bucket to private. only public during dev. FB storage > rules
   - enable app check. https://firebase.google.com/docs/storage/web/start#next_steps
 - can we make app fully workable offline? keep track of sized of stuff locally? only connnectionr equired when generating transcript or updating.
-- clean storage periodically (based on db entries.)
+- clean storage periodically (based on db entries.) - issues sync offline and online datastores (local file deletion.. what about db.)
 
 ## decisions
 
@@ -38,3 +38,4 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 ## questions/doubts/to-think
 
 - what to store locally? and online? -- whats the minimum locally? what would be latency to rerieve files etc?
+- trigger from file saved instead of http on stopreecording?
