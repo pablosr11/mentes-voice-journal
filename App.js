@@ -57,6 +57,16 @@ function DetailsScreen({ route, navigation }) {
       : undefined;
   }, [sound]);
 
+  useFocusEffect(
+    useCallback(() => {
+      setIsLoading(true);
+      fetchData();
+      return () => {
+        console.log("Cleanup");
+      };
+    }, [])
+  );
+
   async function fetchData() {
     const docRef = doc(db, "voiceNotes", file.docId);
     const docSnap = await getDoc(docRef);
