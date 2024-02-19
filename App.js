@@ -289,19 +289,14 @@ function HomeScreen({ navigation }) {
 
     try {
       const docRef = await addDoc(collection(db, "voiceNotes"), audioObject);
-      console.log(
-        "Document written with ID: ",
-        docRef.id,
-        "and filename",
-        filename
-      );
+      console.log("Document written externally");
       audioObject.docId = docRef.id;
       await storeAudioLocally(audioObject);
       const tmp = await onRequestTranscription({
         docId: docRef.id,
         fbStoragePath,
       });
-      console.log("Requested transcription, response: ", tmp);
+      console.log("Requested transcription");
     } catch (e) {
       try {
         await updateDoc(collection(db, "voiceNotes"), {
@@ -314,7 +309,16 @@ function HomeScreen({ navigation }) {
       console.error("Error connecting with db: ", e);
     }
 
-    console.log("Recording stopped and stored at", uri);
+    console.log("Recording stopped");
+  }
+
+  async function deleteAudioFile(filename) {
+    try {
+      await AsyncStorage.removeItem(filename);
+      navigation.navigate("Home");
+    } catch (e) {
+      console.error("Failed to delete audio file", e);
+    }
   }
   return (
     <View style={styles.container}>
@@ -351,6 +355,11 @@ function HomeScreen({ navigation }) {
               onPress={() => navigation.navigate("Details", { file })}
             />
             <View style={{ width: 10 }} />
+            {/* button to delete by filename */}
+            <Button
+              title="Delete"
+              onPress={() => deleteAudioFile(file.filename)}
+            />
           </View>
           <View style={{ height: 20 }} />
         </View>
