@@ -240,8 +240,11 @@ function HomeScreen({ navigation }) {
       },
     };
 
-    // do we want to store the audio locally? (for now, yes)
+    // TODO: do we want to store the audio locally? (for now, yes)
     await storeAudioLocally(audioObject);
+
+    const storageRef = ref(storage, fbStoragePath);
+    await uploadBytes(storageRef, blob);
 
     try {
       const docRef = await addDoc(collection(db, "voiceNotes"), audioObject);
