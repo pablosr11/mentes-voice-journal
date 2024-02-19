@@ -63,6 +63,8 @@ function DetailsScreen({ route, navigation }) {
   async function deleteAudioFile(filename) {
     try {
       await AsyncStorage.removeItem(filename);
+      // TODO: only deleted locally, need to delete from firestore and storage? or audit?
+
       navigation.navigate("Home");
     } catch (e) {
       console.error("Failed to delete audio file", e);
