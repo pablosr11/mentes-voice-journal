@@ -28,9 +28,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import firebaseConfig from "./firebaseConfig"; // TODO: should this be commited?
+import firebaseConfig from "./firebaseConfig";
 
-// Editing this file with fast refresh will reinitialize the app on every refresh, let's not do that
+// To avoid reinitializing the app on every refresh
 if (!getApps().length) {
   var app = initializeApp(firebaseConfig);
 }
@@ -51,7 +51,6 @@ function DetailsScreen({ route, navigation }) {
   useEffect(() => {
     return sound
       ? () => {
-          console.log("Unloading Sound");
           sound.unloadAsync();
         }
       : undefined;
@@ -61,9 +60,7 @@ function DetailsScreen({ route, navigation }) {
     useCallback(() => {
       setIsLoading(true);
       fetchData();
-      return () => {
-        console.log("Cleanup");
-      };
+      return () => {};
     }, [])
   );
 
@@ -72,7 +69,6 @@ function DetailsScreen({ route, navigation }) {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const data = docSnap.data();
-      console.log("Document data:", data);
       setDataObject(data);
       setIsLoading(false);
     } else {
@@ -92,8 +88,6 @@ function DetailsScreen({ route, navigation }) {
   async function deleteAudioFile(filename) {
     try {
       await AsyncStorage.removeItem(filename);
-      // TODO: only deleted locally, need to delete from firestore and storage? or audit?
-
       navigation.navigate("Home");
     } catch (e) {
       console.error("Failed to delete audio file", e);
@@ -117,13 +111,17 @@ function DetailsScreen({ route, navigation }) {
       <Text>Title: {dataObject.data.title}</Text>
       <Text>Summary: {dataObject.data.summary}</Text>
       <Text>
-        Keywords: {dataObject.data.keywords.map((keyword) => keyword + ", ")}
+        Keywords:{" "}
+        {dataObject.data.keywords ? dataObject.data.keywords.join(", ") : ""}
       </Text>
       <Text>Transcription: {dataObject.data.transcript}</Text>
       <View style={{ height: 10 }} />
 
       <View style={{ height: 20 }} />
-      <Button title="Play" onPress={() => playSound(file.uri)} />
+      <Button
+        title="Play"
+        onPress={() => playSound(dataObject.device.onDeviceUri)}
+      />
       <View style={{ height: 10 }} />
       <Button title="Delete" onPress={() => deleteAudioFile(file.filename)} />
       <View style={{ height: 30 }} />
@@ -134,7 +132,7 @@ function DetailsScreen({ route, navigation }) {
 
 function HomeScreen({ navigation }) {
   const [recording, setRecording] = useState();
-  const [audioObjects, setAudioObjects] = useState([]); // [ {uri: "", filename: "", duration: 0} ]
+  const [audioObjects, setAudioObjects] = useState([]);
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [pulseAnimation] = useState(new Animated.Value(1));
 
@@ -285,9 +283,7 @@ function HomeScreen({ navigation }) {
       },
     };
 
-    // TODO: do we want to store the audio locally? (for now, yes)
     await storeAudioLocally(audioObject);
-
     const storageRef = ref(storage, fbStoragePath);
     await uploadBytes(storageRef, blob);
 
