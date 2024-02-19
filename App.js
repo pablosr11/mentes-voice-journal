@@ -7,7 +7,12 @@ import * as Device from "expo-device";
 import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
 import { getApps, initializeApp } from "firebase/app";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  serverTimestamp,
+} from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
@@ -226,7 +231,7 @@ function HomeScreen({ navigation }) {
       },
       userId,
       storagePath: fbStoragePath,
-      createdAt: new Date().toISOString(),
+      createdAt: serverTimestamp(),
       device: {
         osName,
         osVersion,
