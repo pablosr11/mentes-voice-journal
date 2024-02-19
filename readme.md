@@ -10,7 +10,7 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 `firebase login`
 `firebase init functions`
 `firebase emulators:start` - to start local firebase emulator for the fns
-`firebase deploy --only functions:on_request_example` - to deploy a function
+`firebase deploy --only functions` - to deploy a function (set env vars in .env or in the console)
 
 ## issues
 
