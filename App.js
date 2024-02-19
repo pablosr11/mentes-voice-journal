@@ -52,6 +52,19 @@ function DetailsScreen({ route, navigation }) {
       : undefined;
   }, [sound]);
 
+  async function fetchData() {
+    const docRef = doc(db, "voiceNotes", file.docId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      console.log("Document data:", data);
+      setDataObject(data);
+      setIsLoading(false);
+    } else {
+      console.log("No such document!");
+    }
+  }
+
   async function playSound(uri) {
     console.log("Loading Sound");
     const { sound } = await Audio.Sound.createAsync({ uri });
