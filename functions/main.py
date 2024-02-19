@@ -1,8 +1,3 @@
-# Welcome to Cloud Functions for Firebase for Python!
-# To get started, simply uncomment the below code or create your own.
-# Deploy with `firebase deploy`
-
-
 import json
 import logging
 from typing import Any
@@ -10,12 +5,13 @@ from typing import Any
 import google.cloud.logging
 from firebase_admin import initialize_app
 from firebase_functions import https_fn
-from google.cloud import storage
+from google.cloud import storage, firestore
 from openai import OpenAI
 
 openai_client = OpenAI()
 
 storage_client = storage.Client()
+firestore_client = firestore.Client()
 BUCKET_NAME = "mentes-7d592.appspot.com"
 
 logger = google.cloud.logging.Client()
@@ -81,6 +77,22 @@ def on_request_example(req: https_fn.CallableRequest) -> Any:
     except Exception as e:
         logging.error(e)
         return {"data": "transcript or summary error"}
+
+    try:
+        doc_ref = firestore_client.collection("voiceNotes").document(document_id)
+        doc_ref.update(
+            {
+                "data.keywords": keywords,
+                "data.title": title,
+                "data.summary": summary,
+                "data.transcript": transcript,
+                "status": "COMPLETE",
+                "updatedAt": firestore.SERVER_TIMESTAMP,
+            }
+        )
+    except Exception as e:
+        logging.error(e)
+        return {"data": "firestore error"}
 
     return {
         "fbStoragePath": fb_storage_path,
