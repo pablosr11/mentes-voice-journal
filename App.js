@@ -254,18 +254,13 @@ function HomeScreen({ navigation }) {
         "and filename",
         filename
       );
+      const tmp = await onRequestTranscription({
+        docId: docRef.id,
+        fbStoragePath,
+      });
+      console.log("Requested transcription, response: ", tmp);
     } catch (e) {
       console.error("Error adding document: ", e);
-    }
-
-    const storageRef = ref(storage, fbStoragePath);
-    await uploadBytes(storageRef, blob);
-
-    try {
-      const tmp = onRequestTranscription({ filename });
-      console.log("Requested transcription");
-    } catch (e) {
-      console.error("Error requesting transcription: ", e);
     }
 
     console.log("Recording stopped and stored at", uri);
