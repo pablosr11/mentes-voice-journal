@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Audio } from "expo-av";
 import * as Crypto from "expo-crypto";
@@ -9,15 +9,18 @@ import { StatusBar } from "expo-status-bar";
 import { getApps, initializeApp } from "firebase/app";
 import {
   addDoc,
-  updateDoc,
   collection,
+  doc,
+  getDoc,
   getFirestore,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Animated,
   Button,
   StyleSheet,
@@ -42,6 +45,8 @@ const onRequestTranscription = httpsCallable(functions, "on_request_example");
 function DetailsScreen({ route, navigation }) {
   const { file } = route.params;
   const [sound, setSound] = useState();
+  const [dataObject, setDataObject] = useState({ data: null });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     return sound
