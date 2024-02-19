@@ -9,6 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import { getApps, initializeApp } from "firebase/app";
 import {
   addDoc,
+  updateDoc,
   collection,
   getFirestore,
   serverTimestamp,
@@ -224,7 +225,7 @@ function HomeScreen({ navigation }) {
       filename,
       sizeBytes: size,
       durationMs: durationMillis,
-      status: null,
+      status: "PROCESSING",
       data: {
         title: null,
         summary: null,
@@ -262,7 +263,15 @@ function HomeScreen({ navigation }) {
       });
       console.log("Requested transcription, response: ", tmp);
     } catch (e) {
-      console.error("Error adding document: ", e);
+      try {
+        await updateDoc(collection(db, "voiceNotes"), {
+          status: "ERROR",
+        });
+      } catch (e) {
+        console.error("Error updating document: ", e);
+      }
+
+      console.error("Error connecting with db: ", e);
     }
 
     console.log("Recording stopped and stored at", uri);
