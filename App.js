@@ -103,9 +103,15 @@ function DetailsScreen({ route, navigation }) {
       <Text>{file.filename}</Text>
       <Text>Duration: {file.durationMs / 1000} seconds</Text>
       <Text>Size: {file.sizeBytes / 1000} KB</Text>
-      <Text>Summary: ~~100 random chars </Text>
-      <Text>Bullets points: xxx </Text>
-      <Text>Tags: #tag1 #tag2 #tag3 </Text>
+      <View style={{ height: 10 }} />
+      <Text>Title: {dataObject.data.title}</Text>
+      <Text>Summary: {dataObject.data.summary}</Text>
+      <Text>
+        Keywords: {dataObject.data.keywords.map((keyword) => keyword + ", ")}
+      </Text>
+      <Text>Transcription: {dataObject.data.transcript}</Text>
+      <View style={{ height: 10 }} />
+
       <View style={{ height: 20 }} />
       <Button title="Play" onPress={() => playSound(file.uri)} />
       <View style={{ height: 10 }} />
