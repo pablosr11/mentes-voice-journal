@@ -16,19 +16,19 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 
 ## next step
 
-- generate transcript and data - log status in db
+- dont allow to enter detail view if processing is not done.
 
 ## todo
-
+- refactor, both datamodels. only minimal local for now? or sync with firestore?
 - refactor code (dry, data models, minimal local storage so we dont have to sync.)
 - add auth
 - read: https://firebase.google.com/docs/projects/api-keys + same for storage + firestore
-- integrate firebase OR at least trigger pipeline of transcribe etc.
 - do everything on device - no third party doing transcription/processing.
 - set firebase bucket to private. only public during dev. FB storage > rules
   - enable app check. https://firebase.google.com/docs/storage/web/start#next_steps
 - can we make app fully workable offline? keep track of sized of stuff locally? only connnectionr equired when generating transcript or updating.
 - clean storage periodically (based on db entries.) - issues sync offline and online datastores (local file deletion.. what about db.)
+- check if we could sync external to local db periodically. (or on demand)
 
 ## decisions
 
