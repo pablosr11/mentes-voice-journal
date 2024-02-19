@@ -16,6 +16,7 @@ logger.setup_logging()
 
 initialize_app()
 
+# TODO: add cors check
 @https_fn.on_call(region="europe-west2")
 def on_request_example(req: https_fn.CallableRequest) -> Any:
 
