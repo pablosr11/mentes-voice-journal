@@ -7,7 +7,12 @@ from typing import Any
 import google.cloud.logging
 from firebase_admin import initialize_app
 from firebase_functions import https_fn
+from google.cloud import storage
+storage_client = storage.Client()
+BUCKET_NAME = "mentes-7d592.appspot.com"
+
 logger = google.cloud.logging.Client()
+logger.setup_logging()
 
 initialize_app()
 
@@ -22,6 +27,13 @@ def on_request_example(req: https_fn.CallableRequest) -> Any:
     except Exception as e:
         logging.error(e)
         return {"data": "missing docId"}
+
+    try:
+        bucket = storage_client.bucket(BUCKET_NAME)
+        bucket.blob(fb_storage_path).download_to_filename(destination_blob_name)
+    except Exception as e:
+        logging.error(e)
+        return {"data": "storage error"}
     return {
         "fbStoragePath": fb_storage_path,
         "docId": document_id,
