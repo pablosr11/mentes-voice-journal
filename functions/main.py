@@ -5,7 +5,7 @@ from typing import Any
 import google.cloud.logging
 from firebase_admin import initialize_app
 from firebase_functions import https_fn
-from google.cloud import storage, firestore
+from google.cloud import firestore, storage
 from openai import OpenAI
 
 openai_client = OpenAI()
@@ -25,6 +25,7 @@ Your task is to generate a title, a small summary (less than 3 sentences) and an
 Users will use this to quickly understand the content of their audio files and to find them later.
 The summary should be given as if written by the author directly, extracted from the text. Direct to the point and in the author's voice.
 Make sure to use the same language and tone as the original text.
+The summary has to be shorter than the text itself. If its not, then rather use 2 or 3 words to describe it.
 Always respond as JSON with the keys 'title', 'summary' and 'keywords'. Just respond with json.
 """
 
@@ -41,11 +42,11 @@ def generate_corrected_transcript(temperature, system_prompt, transcript):
     return response.choices[0].message.content
 
 
-# TODO: add cors check
 @https_fn.on_call(region="europe-west2")
 def on_request_example(req: https_fn.CallableRequest) -> Any:
 
     # TODO: actually create the doc in firestore here instead of client.
+    # that way client is read-only. and calls apis.
     try:
         document_id = req.data.get("docId")
         destination_blob_name = f"{document_id}.m4a"
