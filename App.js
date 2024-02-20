@@ -291,7 +291,8 @@ function HomeScreen({ navigation }) {
       console.log("Requested transcription");
     } catch (e) {
       try {
-        await updateDoc(collection(db, "voiceNotes"), {
+        const audioObjectRef = doc(db, "voiceNotes", audioObject.docId);
+        await updateDoc(audioObjectRef, {
           status: "ERROR",
           updatedAt: serverTimestamp(),
         });
