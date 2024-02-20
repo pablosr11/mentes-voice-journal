@@ -278,6 +278,7 @@ function HomeScreen({ navigation }) {
     await uploadBytes(storageRef, blob);
 
     try {
+      //TODO move all of this to a cloud function (triggered with storage ref, userid, device details, and file details.)
       const docRef = await addDoc(collection(db, "voiceNotes"), audioObject);
       console.log("Document written externally");
       audioObject.docId = docRef.id;

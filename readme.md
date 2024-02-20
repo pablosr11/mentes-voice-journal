@@ -16,10 +16,13 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 
 ## next step
 
-- dont allow to enter detail view if processing is not done.
+- publish to android store
+
 
 ## todo
-- refactor, both datamodels. only minimal local for now? or sync with firestore?
+- add usage limits until payment included? or some way of reducing costs. 
+- only backend writes to DB - frontend only reads
+- refactor data models and data flows -> copy to offline and dont pull again. if status == complete. what are implications.
 - refactor code (dry, data models, minimal local storage so we dont have to sync.)
 - add auth
 - read: https://firebase.google.com/docs/projects/api-keys + same for storage + firestore
@@ -34,6 +37,7 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 
 - asyncstorage vs https://rnfirebase.io -> keep things simpler and think about online integration later.
 - local device ID -> once auth is introduced we can group local ids against email/id (in case of multiple devices etc. )
+- soft delete + on demand deletion. every entry has isDeleted flag. and a delete button
 
 ## questions/doubts/to-think
 

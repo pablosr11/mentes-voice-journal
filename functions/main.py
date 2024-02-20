@@ -45,8 +45,7 @@ def generate_corrected_transcript(temperature, system_prompt, transcript):
 @https_fn.on_call(region="europe-west2")
 def on_request_example(req: https_fn.CallableRequest) -> Any:
 
-    # TODO: actually create the doc in firestore here instead of client.
-    # that way client is read-only. and calls apis.
+    # TODO: actually create the doc in firestore here instead of client that way client is read-only. and calls apis.
     try:
         document_id = req.data.get("docId")
         destination_blob_name = f"{document_id}.m4a"
