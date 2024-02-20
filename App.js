@@ -136,6 +136,7 @@ function HomeScreen({ navigation }) {
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [pulseAnimation] = useState(new Animated.Value(1));
   const [isProcessing, setIsProcessing] = useState(false);
+  const [userId, setUserId] = useState();
 
   useEffect(() => {
     if (recording) {
@@ -144,6 +145,35 @@ function HomeScreen({ navigation }) {
       stopPulseAnimation();
     }
   }, [recording]);
+
+  useEffect(() => {
+    if (!userId) {
+      getLocalUserId();
+      return;
+    }
+    const q = query(
+      collection(db, "voiceNotes"),
+      where("userId", "==", userId)
+    );
+    const unsubscribe = onSnapshot(q, {
+      next: (querySnapshot) => {
+        const voiceNotes = [];
+        console.log("Updating audio objects..");
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (!data.hasBeenDeleted) {
+            voiceNotes.push({ docId: doc.id, ...data });
+          }
+        });
+
+        setAudioObjects(voiceNotes);
+      },
+      error: (e) => {
+        console.error("Error getting documents: ", e);
+      },
+    });
+    return unsubscribe;
+  }, [setAudioObjects, userId]);
 
   function startPulseAnimation() {
     Animated.loop(
@@ -177,6 +207,7 @@ function HomeScreen({ navigation }) {
       await SecureStore.setItemAsync("secure_deviceid", JSON.stringify(uuid));
       console.log("Generated new UUID and stored in secure storage");
     }
+    setUserId(uuid);
     return uuid;
   }
 
