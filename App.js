@@ -329,29 +329,44 @@ function HomeScreen({ navigation }) {
 
       <Text>Notes:</Text>
       <View style={{ height: 20 }} />
-      {audioObjects.map((file) => (
-        <View key={file.filename}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              title={file.filename}
-              onPress={() => navigation.navigate("Details", { file })}
-            />
-            <View style={{ width: 10 }} />
-            {/* button to delete by filename */}
-            <Button
-              title="Delete"
-              onPress={() => deleteAudioFile(file.filename)}
-            />
-          </View>
-          <View style={{ height: 20 }} />
-        </View>
-      ))}
+      {audioObjects
+        .filter((audioObject) => !audioObject.hasBeenDeleted)
+        .sort((b, a) => b.createdAt - a.createdAt)
+        .map((audioObject) => {
+          if (audioObject.status === "COMPLETE") {
+            return (
+              <View key={audioObject.docId}>
+                <Button
+                  title={audioObject.data.title}
+                  onPress={() =>
+                    navigation.navigate("Details", { file: audioObject })
+                  }
+                />
+                <View style={{ height: 10 }} />
+              </View>
+            );
+          } else if (audioObject.status === "ERROR") {
+            return (
+              <View key={audioObject.docId}>
+                <Button
+                  title={audioObject.filename}
+                  onPress={() =>
+                    navigation.navigate("Details", { file: audioObject })
+                  }
+                />
+                <View style={{ height: 10 }} />
+              </View>
+            );
+          } else {
+            return (
+              <View key={audioObject.docId}>
+                <ActivityIndicator size="large" color="#0000ff" />
+                <View style={{ height: 10 }} />
+              </View>
+            );
+          }
+        })}
+
       <StatusBar style="auto" />
     </View>
   );
