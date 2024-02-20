@@ -246,7 +246,6 @@ function HomeScreen({ navigation }) {
     const blob = await response.blob();
 
     const sizeBytes = blob.size;
-    const userId = await getLocalUserId();
     const filename = await generateFilename();
     const blobStoragePath = `audios/${userId}/${filename}`;
 
