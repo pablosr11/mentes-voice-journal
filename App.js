@@ -1,5 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Audio } from "expo-av";
 import * as Crypto from "expo-crypto";
@@ -11,14 +10,16 @@ import {
   addDoc,
   collection,
   doc,
-  getDoc,
   getFirestore,
+  onSnapshot,
+  query,
   serverTimestamp,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Animated,
@@ -45,8 +46,6 @@ const onRequestTranscription = httpsCallable(functions, "on_request_example");
 function DetailsScreen({ route, navigation }) {
   const { file } = route.params;
   const [sound, setSound] = useState();
-  const [dataObject, setDataObject] = useState({ data: null });
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     return sound
@@ -55,26 +54,6 @@ function DetailsScreen({ route, navigation }) {
         }
       : undefined;
   }, [sound]);
-
-  useFocusEffect(
-    useCallback(() => {
-      setIsLoading(true);
-      fetchData();
-      return () => {};
-    }, [])
-  );
-
-  async function fetchData() {
-    const docRef = doc(db, "voiceNotes", file.docId);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      setDataObject(data);
-      setIsLoading(false);
-    } else {
-      console.log("No such document!");
-    }
-  }
 
   async function playSound(uri) {
     console.log("Loading Sound");
