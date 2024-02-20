@@ -97,19 +97,19 @@ function DetailsScreen({ route, navigation }) {
       <Text>Duration: {file.durationMs / 1000} seconds</Text>
       <Text>Size: {file.sizeBytes / 1000} KB</Text>
       <View style={{ height: 10 }} />
-      <Text>Title: {dataObject.data.title}</Text>
-      <Text>Summary: {dataObject.data.summary}</Text>
+      <Text>Title: {file.data.title}</Text>
+      <Text>Summary: {file.data.summary}</Text>
       <Text>
         Keywords:{" "}
-        {dataObject.data.keywords ? dataObject.data.keywords.join(", ") : ""}
+        {file.data.keywords ? file.data.keywords.join(", ") : "No keywords"}
       </Text>
-      <Text>Transcription: {dataObject.data.transcript}</Text>
+      <Text>Transcription: {file.data.transcript}</Text>
       <View style={{ height: 10 }} />
 
       <View style={{ height: 20 }} />
       <Button
         title="Play"
-        onPress={() => playSound(dataObject.device.onDeviceUri)}
+        onPress={() => playSound(file.device.deviceStoragePath)}
       />
       <View style={{ height: 10 }} />
       <Button title="Delete" onPress={() => deleteAudioFile(file.filename)} />
