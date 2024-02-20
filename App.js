@@ -188,21 +188,6 @@ function HomeScreen({ navigation }) {
     pulseAnimation.setValue(1);
   }
 
-  async function getLocalUserId() {
-    const fetchUUID = await SecureStore.getItemAsync("secure_deviceid");
-    if (fetchUUID) {
-      console.log("Fetched UUID from secure storage");
-      const cleanUUID = fetchUUID.replace(/['"]+/g, "");
-      uuid = cleanUUID;
-    } else {
-      uuid = Crypto.randomUUID();
-      await SecureStore.setItemAsync("secure_deviceid", JSON.stringify(uuid));
-      console.log("Generated new UUID and stored in secure storage");
-    }
-    setUserId(uuid);
-    return uuid;
-  }
-
   async function generateFilename() {
     const date = new Date();
     const day = date.getDate().toString().padStart(2, "0");
@@ -308,7 +293,7 @@ function HomeScreen({ navigation }) {
     console.log("Recording stopped");
   }
 
-  return (    
+  return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.recordButton}
