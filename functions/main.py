@@ -53,14 +53,14 @@ def on_request_example(req: https_fn.CallableRequest) -> Any:
         fb_storage_path = req.data.get("blobStoragePath")
     except Exception as e:
         logging.error(e)
-        return {"data": "missing docId"}
+        raise https_fn.HttpsError(400, "missing docId or blobStoragePath")
 
     try:
         bucket = storage_client.bucket(BUCKET_NAME)
         bucket.blob(fb_storage_path).download_to_filename(destination_blob_name)
     except Exception as e:
         logging.error(e)
-        return {"data": "storage error"}
+        raise https_fn.HttpsError(400, "blob download error")
 
     try:
         with open(destination_blob_name, "rb") as f:
@@ -78,7 +78,7 @@ def on_request_example(req: https_fn.CallableRequest) -> Any:
 
     except Exception as e:
         logging.error(e)
-        return {"data": "transcript or summary error"}
+        raise https_fn.HttpsError(400, "openai error")
 
     try:
         doc_ref = firestore_client.collection("voiceNotes").document(document_id)
@@ -94,7 +94,7 @@ def on_request_example(req: https_fn.CallableRequest) -> Any:
         )
     except Exception as e:
         logging.error(e)
-        return {"data": "firestore error"}
+        raise https_fn.HttpsError(400, "firestore error")
 
     return {
         "blobStoragePath": fb_storage_path,
