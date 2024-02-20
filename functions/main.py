@@ -50,7 +50,7 @@ def on_request_example(req: https_fn.CallableRequest) -> Any:
     try:
         document_id = req.data.get("docId")
         destination_blob_name = f"{document_id}.m4a"
-        fb_storage_path = req.data.get("fbStoragePath")
+        fb_storage_path = req.data.get("blobStoragePath")
     except Exception as e:
         logging.error(e)
         return {"data": "missing docId"}
@@ -97,7 +97,7 @@ def on_request_example(req: https_fn.CallableRequest) -> Any:
         return {"data": "firestore error"}
 
     return {
-        "fbStoragePath": fb_storage_path,
+        "blobStoragePath": fb_storage_path,
         "docId": document_id,
         "transcript": transcript,
         "title": title,
