@@ -72,11 +72,17 @@ function DetailsScreen({ route, navigation }) {
       console.error("Failed to delete audio file", e);
     }
   }
-
-  if (isLoading) {
+  if (file.status === "ERROR") {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator />
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>Failed to process {file.data.title || file.filename} </Text>
+        <View style={{ height: 10 }} />
+        <Button title="Delete" onPress={() => deleteAudioFile(file.filename)} />
+        <View style={{ height: 30 }} />
+        <Button
+          title="Go to Home"
+          onPress={() => navigation.navigate("Home")}
+        />
       </View>
     );
   }
