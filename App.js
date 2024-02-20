@@ -39,7 +39,7 @@ const blobStorage = getStorage();
 const Stack = createNativeStackNavigator();
 const db = getFirestore(app);
 
-const auth = getAuth();
+const auth = getAuth(app);
 const functions = getFunctions(app, "europe-west2");
 const onRequestTranscription = httpsCallable(functions, "on_request_example");
 

@@ -17,6 +17,8 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 ## next step
 
 - publish to android store
+  - check expo build to do it as manually seems tedius/complex for the experiment. 
+  - currently failing for firebase config. should we commit?
 
 
 ## todo
@@ -24,7 +26,6 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 - only backend writes to DB - frontend only reads
 - refactor data models and data flows -> copy to offline and dont pull again. if status == complete. what are implications.
 - refactor code (dry, data models, minimal local storage so we dont have to sync.)
-- add auth
 - read: https://firebase.google.com/docs/projects/api-keys + same for storage + firestore
 - do everything on device - no third party doing transcription/processing.
 - set firebase bucket to private. only public during dev. FB storage > rules
