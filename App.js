@@ -59,14 +59,18 @@ function DetailsScreen({ route, navigation }) {
     console.log("Loading Sound");
     const { sound } = await Audio.Sound.createAsync({ uri });
     setSound(sound);
-
     console.log("Playing Sound");
     await sound.playAsync();
   }
 
-  async function deleteAudioFile(filename) {
+  async function deleteAudioFile() {
     try {
+      const audioObjectRef = doc(db, "voiceNotes", file.docId);
+      await updateDoc(audioObjectRef, {
+        hasBeenDeleted: true,
         updatedAt: serverTimestamp(),
+      });
+
       navigation.navigate("Home");
     } catch (e) {
       console.error("Failed to delete audio file", e);
