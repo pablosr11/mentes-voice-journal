@@ -87,7 +87,7 @@ function DetailsScreen({ route, navigation }) {
 
   async function deleteAudioFile(filename) {
     try {
-      await AsyncStorage.removeItem(filename);
+        updatedAt: serverTimestamp(),
       navigation.navigate("Home");
     } catch (e) {
       console.error("Failed to delete audio file", e);
@@ -301,6 +301,7 @@ function HomeScreen({ navigation }) {
       try {
         await updateDoc(collection(db, "voiceNotes"), {
           status: "ERROR",
+          updatedAt: serverTimestamp(),
         });
       } catch (e) {
         console.error("Error updating document: ", e);
