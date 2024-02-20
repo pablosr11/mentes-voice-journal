@@ -78,6 +78,11 @@ def on_request_example(req: https_fn.CallableRequest) -> Any:
 
     except Exception as e:
         logging.error(e)
+        try:
+            doc_ref = firestore_client.collection("voiceNotes").document(document_id)
+            doc_ref.update({"status": "ERROR", "updatedAt": firestore.SERVER_TIMESTAMP})
+        except Exception as exc:
+            logging.error(exc)
         raise https_fn.HttpsError(400, "openai error")
 
     try:
