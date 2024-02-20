@@ -124,7 +124,6 @@ function HomeScreen({ navigation }) {
   const [audioObjects, setAudioObjects] = useState([]);
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [pulseAnimation] = useState(new Animated.Value(1));
-  const [isProcessing, setIsProcessing] = useState(false);
   const [userId, setUserId] = useState();
 
   useEffect(() => {
@@ -236,7 +235,6 @@ function HomeScreen({ navigation }) {
   async function stopRecording() {
     console.log("Stopping recording..");
     setRecording(undefined);
-    setIsProcessing(true);
     await recording.stopAndUnloadAsync();
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
@@ -304,15 +302,13 @@ function HomeScreen({ navigation }) {
     }
 
     console.log("Recording stopped");
-    setIsProcessing(false);
   }
 
-  return (
+  return (    
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.recordButton}
         onPress={recording ? stopRecording : startRecording}
-        disabled={isProcessing}
       >
         <Animated.Text
           style={[
