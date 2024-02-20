@@ -35,7 +35,7 @@ if (!getApps().length) {
   var app = initializeApp(firebaseConfig);
 }
 
-const storage = getStorage();
+const blobStorage = getStorage();
 const Stack = createNativeStackNavigator();
 const db = getFirestore(app);
 
@@ -247,24 +247,22 @@ function HomeScreen({ navigation }) {
       allowsRecordingIOS: false,
     });
 
-    const { durationMillis } = await recording.getStatusAsync();
-    const uri = recording.getURI();
-    const response = await fetch(uri);
+    const { durationMillis: durationMs } = await recording.getStatusAsync();
+    const deviceStoragePath = recording.getURI();
+    const response = await fetch(deviceStoragePath);
     const blob = await response.blob();
 
-    const size = blob.size;
+    const sizeBytes = blob.size;
     const userId = await getLocalUserId();
     const filename = await generateFilename();
-    const fbStoragePath = `audios/${userId}/${filename}`;
+    const blobStoragePath = `audios/${userId}/${filename}`;
 
-    const osName = Device.osName;
-    const osVersion = Device.osVersion;
-    const modelName = Device.modelName;
+    const { osName, osVersion, modelName } = Device;
 
     const audioObject = {
       filename,
-      sizeBytes: size,
-      durationMs: durationMillis,
+      sizeBytes,
+      durationMs,
       status: "PROCESSING",
       data: {
         title: null,
@@ -273,28 +271,27 @@ function HomeScreen({ navigation }) {
         transcript: null,
       },
       userId,
-      storagePath: fbStoragePath,
+      blobStoragePath,
+      hasBeenDeleted: false,
       createdAt: serverTimestamp(),
       device: {
         osName,
         osVersion,
         modelName,
-        onDeviceUri: uri,
+        deviceStoragePath,
       },
     };
 
-    await storeAudioLocally(audioObject);
-    const storageRef = ref(storage, fbStoragePath);
+    const storageRef = ref(blobStorage, blobStoragePath);
     await uploadBytes(storageRef, blob);
 
     try {
       const docRef = await addDoc(collection(db, "voiceNotes"), audioObject);
       console.log("Document written externally");
       audioObject.docId = docRef.id;
-      await storeAudioLocally(audioObject);
-      const tmp = await onRequestTranscription({
+      await onRequestTranscription({
         docId: docRef.id,
-        fbStoragePath,
+        blobStoragePath,
       });
       console.log("Requested transcription");
     } catch (e) {
