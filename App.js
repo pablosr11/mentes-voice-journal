@@ -135,13 +135,7 @@ function HomeScreen({ navigation }) {
   const [audioObjects, setAudioObjects] = useState([]);
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [pulseAnimation] = useState(new Animated.Value(1));
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      getAudioFiles();
-    });
-    return unsubscribe;
-  }, [navigation]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     if (recording) {
@@ -242,6 +236,7 @@ function HomeScreen({ navigation }) {
   async function stopRecording() {
     console.log("Stopping recording..");
     setRecording(undefined);
+    setIsProcessing(true);
     await recording.stopAndUnloadAsync();
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
@@ -304,39 +299,32 @@ function HomeScreen({ navigation }) {
         console.error("Error updating document: ", e);
       }
 
-      console.error("Error connecting with db: ", e);
+      console.error("Error connecting with database: ", e);
     }
 
     console.log("Recording stopped");
-  }
-
-  async function deleteAudioFile(filename) {
-    try {
-      await AsyncStorage.removeItem(filename);
-      navigation.navigate("Home");
-    } catch (e) {
-      console.error("Failed to delete audio file", e);
-    }
-  }
+    setIsProcessing(false);
   return (
     <View style={styles.container}>
-      <Text>Tap to start recording!</Text>
-      <View style={{ height: 20 }} />
-      <Animated.View style={{ transform: [{ scale: pulseAnimation }] }}>
-        <TouchableOpacity
-          style={
-            recording
-              ? [styles.recordButton, { backgroundColor: "red" }]
-              : styles.recordButton
-          }
-          onPress={recording ? stopRecording : startRecording}
+      <TouchableOpacity
+        style={styles.recordButton}
+        onPress={recording ? stopRecording : startRecording}
+        disabled={isProcessing}
+      >
+        <Animated.Text
+          style={[
+            styles.buttonText,
+            {
+              transform: [{ scale: pulseAnimation }],
+            },
+          ]}
         >
-          <Text style={styles.buttonText}>
-            {recording ? "Stop Recording" : "Start Recording"}
-          </Text>
-        </TouchableOpacity>
-      </Animated.View>
+          {recording ? "Stop" : "Record"}
+        </Animated.Text>
+      </TouchableOpacity>
       <View style={{ height: 20 }} />
+      <View style={{ height: 20 }} />
+
       <Text>Notes:</Text>
       <View style={{ height: 20 }} />
       {audioObjects.map((file) => (
