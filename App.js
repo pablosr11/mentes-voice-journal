@@ -1,11 +1,10 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Audio } from "expo-av";
-import * as Crypto from "expo-crypto";
 import * as Device from "expo-device";
-import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
 import { getApps, initializeApp } from "firebase/app";
+import { getAuth, signInAnonymously } from "firebase/auth";
 import {
   addDoc,
   collection,
@@ -40,6 +39,7 @@ const blobStorage = getStorage();
 const Stack = createNativeStackNavigator();
 const db = getFirestore(app);
 
+const auth = getAuth();
 const functions = getFunctions(app, "europe-west2");
 const onRequestTranscription = httpsCallable(functions, "on_request_example");
 
@@ -135,33 +135,37 @@ function HomeScreen({ navigation }) {
   }, [recording]);
 
   useEffect(() => {
-    if (!userId) {
-      getLocalUserId();
-      return;
-    }
-    const q = query(
-      collection(db, "voiceNotes"),
-      where("userId", "==", userId)
-    );
-    const unsubscribe = onSnapshot(q, {
-      next: (querySnapshot) => {
-        const voiceNotes = [];
-        console.log("Updating audio objects..");
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          if (!data.hasBeenDeleted) {
-            voiceNotes.push({ docId: doc.id, ...data });
-          }
-        });
+    signInAnonymously(auth)
+      .then(() => {
+        console.log("Signed in anonymously:", auth.currentUser.uid);
+        setUserId(auth.currentUser.uid);
+        const q = query(
+          collection(db, "voiceNotes"),
+          where("userId", "==", auth.currentUser.uid)
+        );
+        const unsubscribe = onSnapshot(q, {
+          next: (querySnapshot) => {
+            const voiceNotes = [];
+            console.log("Updating audio objects..");
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              if (!data.hasBeenDeleted) {
+                voiceNotes.push({ docId: doc.id, ...data });
+              }
+            });
 
-        setAudioObjects(voiceNotes);
-      },
-      error: (e) => {
-        console.error("Error getting documents: ", e);
-      },
-    });
-    return unsubscribe;
-  }, [setAudioObjects, userId]);
+            setAudioObjects(voiceNotes);
+          },
+          error: (e) => {
+            console.error("Error getting documents: ", e);
+          },
+        });
+        return unsubscribe;
+      })
+      .catch((error) => {
+        console.error("Failed to sign in anonymously", error);
+      });
+  }, [setAudioObjects]);
 
   function startPulseAnimation() {
     Animated.loop(
