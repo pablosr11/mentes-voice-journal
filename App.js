@@ -211,26 +211,6 @@ function HomeScreen({ navigation }) {
     return uuid;
   }
 
-  async function getAudioFiles() {
-    try {
-      const keys = await AsyncStorage.getAllKeys();
-      const items = await AsyncStorage.multiGet(keys);
-      setAudioObjects(items.map((item) => JSON.parse(item[1])));
-    } catch (e) {
-      console.error("Failed to get audio files", e);
-    }
-  }
-
-  async function storeAudioLocally(audioObject) {
-    const filename = audioObject.filename;
-    try {
-      await AsyncStorage.setItem(filename, JSON.stringify(audioObject));
-      await getAudioFiles();
-    } catch (e) {
-      console.error("Failed to store audio", e);
-    }
-  }
-
   async function generateFilename() {
     const date = new Date();
     const day = date.getDate().toString().padStart(2, "0");
@@ -335,6 +315,8 @@ function HomeScreen({ navigation }) {
 
     console.log("Recording stopped");
     setIsProcessing(false);
+  }
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
