@@ -62,6 +62,8 @@ def on_request_example(req: https_fn.CallableRequest) -> Any:
         logging.error(e)
         raise https_fn.HttpsError(400, "blob download error")
 
+    logging.info("document retrieved")
+
     try:
         with open(destination_blob_name, "rb") as f:
             transcript_object = openai_client.audio.transcriptions.create(
@@ -85,6 +87,8 @@ def on_request_example(req: https_fn.CallableRequest) -> Any:
             logging.error(exc)
         raise https_fn.HttpsError(400, "openai error")
 
+    logging.info("third party data generated")
+
     try:
         doc_ref = firestore_client.collection("voiceNotes").document(document_id)
         doc_ref.update(
@@ -100,6 +104,8 @@ def on_request_example(req: https_fn.CallableRequest) -> Any:
     except Exception as e:
         logging.error(e)
         raise https_fn.HttpsError(400, "firestore error")
+
+    logging.info("process completed")
 
     return {
         "blobStoragePath": fb_storage_path,
