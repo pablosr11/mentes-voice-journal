@@ -24,6 +24,8 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 ## todo
 - add usage limits until payment included? or some way of reducing costs. 
 - only backend writes to DB - frontend only reads
+- text search on notes!
+- styling the notes w date + title. 
 - refactor data models and data flows -> copy to offline and dont pull again. if status == complete. what are implications.
 - refactor code (dry, data models, minimal local storage so we dont have to sync.)
 - read: https://firebase.google.com/docs/projects/api-keys + same for storage + firestore
