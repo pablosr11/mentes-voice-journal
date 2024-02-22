@@ -21,7 +21,7 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 
 
 ## todo
-- add usage limits until payment included? or some way of reducing costs. 
+- add usage limits until payment included? or some way of reducing costs. -- openai limit is 25mb per audio. limit N notes of M minutes as a test - should be plenty enough for more than a couple days. ()
 - only backend writes to DB - frontend only reads
 - text search on notes!
 - styling the notes w date + title. 
