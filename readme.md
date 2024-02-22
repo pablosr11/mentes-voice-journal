@@ -21,6 +21,7 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 
 
 ## todo
+- check talknotes -- 
 - add usage limits until payment included? or some way of reducing costs. -- openai limit is 25mb per audio. limit N notes of M minutes as a test - should be plenty enough for more than a couple days. ()
 - only backend writes to DB - frontend only reads
 - text search on notes!
@@ -38,7 +39,6 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 ## decisions
 
 - asyncstorage vs https://rnfirebase.io -> keep things simpler and think about online integration later.
-- local device ID -> once auth is introduced we can group local ids against email/id (in case of multiple devices etc. )
 - soft delete + on demand deletion. every entry has isDeleted flag. and a delete button
 
 ## questions/doubts/to-think
