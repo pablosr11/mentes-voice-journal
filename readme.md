@@ -15,10 +15,9 @@ Small app to record and transcript your thoughts. or ideas. or emotions.
 ## issues
 
 ## next step
-
 - publish to android store
-  - check expo build to do it as manually seems tedius/complex for the experiment. 
-  - currently failing for firebase config. should we commit?
+  - check expo eas build to do it as manually seems tedius/complex for the experiment. 
+  - currently failing for firebase config. should we commit? if so - what protections on the DB to avoide abuse missue etc? 
 
 
 ## todo
